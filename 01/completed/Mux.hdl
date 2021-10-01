@@ -1,0 +1,61 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux.hdl
+
+/** 
+ * Multiplexor:
+ * out = a if sel == 0
+ *       b otherwise
+ */
+
+CHIP Mux {
+    IN a, b, sel;
+    OUT out;
+
+	/**
+	a	b	sel		out
+	0	0	0		0
+	0	0	1		0
+	0	1	0		0
+	0	1	1		1
+	1	0	0		1
+	1	0	1		0
+	1	1	0		1
+	1	1	1		1
+	*/
+	
+	
+    PARTS:
+    // Put your code here:
+	Not(in=a, out=notA);
+	Not(in=b, out=notB);
+	Not(in=sel, out=notSel);
+	
+	And(a=notA, b=b, out=notaAndB);
+	And(a=notaAndB, b=sel, out=notaAndBAndSel);
+	
+	And(a=a, b=notB, out=aAndnotB);
+	And(a=aAndnotB, b=notSel, out=aAndnotBandNotSel);
+	
+	And(a=a, b=b, out=aAndb);
+	
+	Or(a=notaAndBAndSel, b=aAndnotBandNotSel, out=notaAndBAndSelOraAndnotBandNotSel);
+	Or(a=notaAndBAndSelOraAndnotBandNotSel, b=aAndb, out=out);
+
+	
+	
+	// (notA And b And sel) Or (a And notB And notSel) Or (a And b)
+	
+	// (notA And b And sel) Or (a And notB And notSel) Or (a And b And notSel) Or (a And b And sel)
+	// (a And b And notSel) Or (a And b And sel)
+	// (x And notSel) Or (x And sel)
+	// Not(Not(x And notSel) And Not(x And sel)
+	// Not((Not(x) Or sel) And (Not(x) Or Not(sel)))
+	// Not(Not(x) And (sel Or Not(sel)))
+	// Not(Not(x))
+	// x
+	
+
+	
+}
